@@ -1,0 +1,11 @@
+{
+  "name": "mud-rs-client",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "envis10n",
+  "license": "None",
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.3.1"
+  }
+}
