@@ -17,6 +17,9 @@ $(function(){
         try {
             let dobj = JSON.parse(data);
             switch(dobj.event) {
+                case 'keep-alive':
+                    ws.send({request:"keep-alive"});
+                break;
                 case "print":
                     if (terminal) {
                         terminal.write(dobj.payload);
