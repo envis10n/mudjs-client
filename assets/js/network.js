@@ -1,5 +1,6 @@
 $(function(){
-    let ws = new WebSocket("ws://localhost:45678");
+    let uri = window.location.hostname == 'game.mudjs.net' ? "wss://game.mudjs.net/ws" : "localhost:45678";
+    let ws = new WebSocket(uri);
     
     ws._send = ws.send;
     
