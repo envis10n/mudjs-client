@@ -18,26 +18,33 @@ html, body {
 }
 
 #terminal-input {
-    border: 0;
-    display: inline-block;
     vertical-align: middle;
     margin-top: 1px;
+    flex-flow: row;
+    box-sizing: border-box;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 #input-prompt {
-    display: inline-block;
+    width: fit-content;
+    flex-grow: 0;
+    flex-shrink: 1;
     padding-top: 3px;
     vertical-align: middle;
+    flex-flow: row;
     text-align: right;
+    box-sizing: border-box;
 }
 
 #terminal-input:focus {
     outline: none;
 }
 
-#input-line{
+#inputline{
     margin: 0;
     top: 0;
     width: 100%;
     box-sizing: border-box;
+    display: inline-flex;
 }
