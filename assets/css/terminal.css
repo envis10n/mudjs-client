@@ -18,6 +18,7 @@ html, body {
 }
 
 #terminal-input {
+    border: 0;
     vertical-align: middle;
     margin-top: 1px;
     flex-flow: row;
