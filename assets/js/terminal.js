@@ -4,16 +4,40 @@ class Terminal {
         opts = Object.assign(opts, {
             prompt: "$ ",
         });
-        this.input = $(`<input autocomplete="off" type="text" id="terminal-input" class="terminal">`);
-        this.output.parent().append(this.input);
+        this.inputline = $(`<div id="inputline"></div>`);
+        this.input = {focus:()=>{}, remove:()=>{}}; // noop
+        this.prompt = $(`<div id="input-prompt" class="terminal">${opts.prompt}</div>`);
+        this.inputline.append(this.prompt);
+        this.output.parent().append(this.inputline);
         $(document).click(()=>{
             this.input.focus();
         });
-        this.prompt = opts.prompt;
-        this.default_prompt = this.prompt;
+        this.default_prompt = opts.prompt;
 
         this.oncommit = opts.oncommit || function(){};
 
+        this.echo = true;
+
+        this.mask = false;
+
+        this.setMask(false);
+    }
+    getPrompt(){
+        return this.prompt.html();
+    }
+    setMask(mask = false){
+        this.mask = mask;
+        if(this.mask){
+            this.input.remove();
+            this.input = $(`<input autocomplete="off" type="password" id="terminal-input" class="terminal">`);
+            this.inputline.append(this.input);
+            this.input.focus();
+        } else {
+            this.input.remove();
+            this.input = $(`<input autocomplete="off" type="text" id="terminal-input" class="terminal">`);
+            this.inputline.append(this.input);
+            this.input.focus();
+        }
         const keys = {
             ENTER: 13,
             ESC: 27,
@@ -23,52 +47,26 @@ class Terminal {
             LEFT: 37,
             RIGHT: 39
         }
-
-        this.buffer = "";
-
-        this.echo = true;
-
-        this.mask = false;
-
         this.input.keydown((ev) => {
             switch(ev.keyCode){
                 case keys.ENTER:
                     // Commit text
-                    let input = this.mask ? this.buffer : this.input.val().substring(this.prompt.length);
-                    this.buffer = "";
+                    let input = this.input.val();
                     this.input.val(this.default_prompt);
-                    if(this.echo && !this.mask) this.write(`${this.prompt}${html.encode(input)}`);
-                    this.mask = false;
-                    this.prompt = this.default_prompt;
+                    if(this.echo && !this.mask) this.write(`${this.getPrompt()}${html.encode(input)}`);
+                    this.setMask(false);
+                    this.setPrompt(this.default_prompt);
                     this.oncommit(input);
                 break;
                 case keys.ESC:
                     // Clear input
-                    this.input.val(this.prompt);
-                    this.buffer = "";
-                break;
-                case keys.BACKSPACE:
-                    if(this.buffer.length > 0) this.buffer = this.buffer.substring(0, this.buffer.length-1);
-                    if(this.input.val().length == this.prompt.length) ev.preventDefault();
-                break;
-                case keys.UP:
-                case keys.DOWN:
-                case keys.LEFT:
-                case keys.RIGHT:
-                    ev.preventDefault();
+                    this.input.val("");
                 break;
             }
         });
-
-        this.input.keyup((ev)=>{
-            if(this.mask){
-                let input = this.input.val();
-                this.input.val(this.prompt);
-                this.buffer += input.substring(this.prompt.length);
-                ev.preventDefault();
-            }
-        });
-        this.input.val(this.prompt);
+    }
+    setPrompt(prompt){
+        this.prompt.html(prompt);
     }
     write(...args){
         args = colorize(args.join(" "));

@@ -1,10 +1,11 @@
 html, body {
     margin: 0;
-    padding: 0;
+    padding: 5px;
     min-height: 100%;
     height: 100%;
     width: 100%;
     background: #000000;
+    box-sizing: border-box;
 }
 
 .terminal {
@@ -13,13 +14,31 @@ html, body {
     white-space: pre-wrap;
     font-size: 12pt;
     color: #ffffff;
+    box-sizing: border-box;
 }
 
 #terminal-input {
     border: 0;
-    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 2px;
+    margin-left: 2px;
+}
+
+#input-prompt {
+    display: inline-block;
+    padding-top: 5px;
+    vertical-align: middle;
+    text-align: right;
 }
 
 #terminal-input:focus {
     outline: none;
+}
+
+#input-line{
+    margin: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
 }

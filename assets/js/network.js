@@ -27,13 +27,8 @@ $(function(){
                 break;
                 case 'prompt':
                     let inp = terminal.input.val().substring(terminal.prompt.length);
-                    terminal.prompt = dobj.prompt;
-                    terminal.mask = Boolean(dobj.mask);
-                    if(terminal.mask) {
-                        terminal.buffer = inp;
-                        inp = "";
-                    }
-                    terminal.input.val(`${terminal.prompt}${inp}`);
+                    terminal.setPrompt(dobj.prompt);
+                    terminal.setMask(Boolean(dobj.mask));
                 break;
             }
         } catch(e) {
