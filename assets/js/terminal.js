@@ -29,12 +29,12 @@ class Terminal {
         this.mask = mask;
         if(this.mask){
             this.input.remove();
-            this.input = $(`<input autocomplete="off" type="password" id="terminal-input" class="terminal">`);
+            this.input = $(`<input autocomplete="nope" type="password" id="terminal-input" class="terminal">`);
             this.inputline.append(this.input);
             this.input.focus();
         } else {
             this.input.remove();
-            this.input = $(`<input autocomplete="off" type="text" id="terminal-input" class="terminal">`);
+            this.input = $(`<input autocomplete="nope" type="text" id="terminal-input" class="terminal">`);
             this.inputline.append(this.input);
             this.input.focus();
         }
