@@ -4,7 +4,7 @@ class Terminal {
         opts = Object.assign(opts, {
             prompt: "$ ",
         });
-        this.input = $(`<input type="text" id="terminal-input" class="terminal">`);
+        this.input = $(`<input autocomplete="off" type="text" id="terminal-input" class="terminal">`);
         this.output.parent().append(this.input);
         $(document).click(()=>{
             this.input.focus();
