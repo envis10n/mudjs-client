@@ -22,7 +22,7 @@ $(function(){
                 break;
                 case "print":
                     if (terminal) {
-                        terminal.write(html.encode(dobj.payload));
+                        terminal.write(dobj.payload);
                     }
                 break;
                 case 'prompt':

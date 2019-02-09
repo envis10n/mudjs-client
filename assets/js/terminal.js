@@ -16,11 +16,41 @@ class Terminal {
 
         this.oncommit = opts.oncommit || function(){};
 
+        this.history = {};
+        this.history.cache = [];
+        this.history.cursor = -1;
+        this.history.temp = "";
+
         this.echo = true;
 
         this.mask = false;
 
         this.setMask(false);
+    }
+    pushHistory(command){
+        if(!this.mask) {
+            this.history.cache.push(command);
+            this.history.cursor = this.history.cache.length;
+            this.history.temp = "";
+        }
+    }
+    checkHistoryCursor(){
+        return (this.history.cursor == this.history.cache.length || this.history.cursor == -1);
+    }
+    getHistory(up){
+        if(this.history.cache.length == 0) return;
+        if(up) {
+            this.history.cursor -= 1;
+            if(this.history.cursor < 0) {
+                this.history.cursor = this.history.cache.length;
+            }
+        } else {
+            this.history.cursor += 1;
+            if(this.history.cursor > this.history.cache.length){
+                this.history.cursor = 0;
+            }
+        }
+        return this.history.cache[this.history.cursor] || this.history.temp;
     }
     getPrompt(){
         return this.prompt.html();
@@ -53,6 +83,7 @@ class Terminal {
                     // Commit text
                     let input = this.input.val();
                     this.input.val(this.default_prompt);
+                    this.pushHistory(input);
                     if(this.echo && !this.mask) this.write(`${this.getPrompt()}${html.encode(input)}`);
                     this.setMask(false);
                     this.setPrompt(this.default_prompt);
@@ -60,13 +91,35 @@ class Terminal {
                 break;
                 case keys.ESC:
                     // Clear input
+                    this.history.cursor = this.history.cache.length;
                     this.input.val("");
+                break;
+                case keys.UP:
+                    if(this.history.temp == "" || this.checkHistoryCursor()) this.history.temp = this.input.val();
+                    let histup = this.getHistory(true);
+                    if(histup != undefined) {
+                        this.input.val("");
+                        this.input.val(histup);
+                        ev.preventDefault();
+                    }
+                break;
+                case keys.DOWN:
+                    if(this.history.temp == "" || this.checkHistoryCursor()) this.history.temp = this.input.val();
+                    let histd = this.getHistory(false);
+                    if(histd != undefined) {
+                        this.input.val("");
+                        this.input.val(histd);
+                        ev.preventDefault();
+                    }
+                break;
+                default:
+                    if(this.input.val() == "") this.history.temp = "";
                 break;
             }
         });
     }
     setPrompt(prompt){
-        this.prompt.html(prompt);
+        this.prompt.html(colorize(prompt));
     }
     write(...args){
         args = colorize(args.join(" "));
