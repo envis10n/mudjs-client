@@ -26,7 +26,7 @@ let ansi = {
 
 function colorize(input){
     input = html.encode(input);
-    let reg = new RegExp(/(\x1b\[\d?\;?\d\dm)/g);
+    let reg = new RegExp(/(\x1b\[\d?\;?\d\d?m)/g);
     let count = 0;
     let match = reg.exec(input);
     while(match) {
